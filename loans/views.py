@@ -17,6 +17,7 @@ def register(request):
     customer = Customer.objects.create(
         first_name=request.data["first_name"],
         last_name=request.data["last_name"],
+        age=request.data["age"],
         phone_number=request.data["phone_number"],
         monthly_salary=salary,
         approved_limit=approved_limit,

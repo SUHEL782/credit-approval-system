@@ -1,10 +1,9 @@
 import pandas as pd
+from celery import shared_task
 from .models import Customer, Loan
-import pandas as pd
-df = pd.read_excel("loan_data.xlsx")
-df.columns
 
 
+@shared_task
 def load_customer_data():
 
     df = pd.read_excel("customer_data.xlsx")
@@ -19,6 +18,7 @@ def load_customer_data():
 
                 "first_name": row["First Name"],
                 "last_name": row["Last Name"],
+                "age": 30,
                 "phone_number": row["Phone Number"],
                 "monthly_salary": row["Monthly Salary"],
                 "approved_limit": row["Approved Limit"],
@@ -28,6 +28,7 @@ def load_customer_data():
         )
 
 
+@shared_task
 def load_loan_data():
 
     df = pd.read_excel("loan_data.xlsx")

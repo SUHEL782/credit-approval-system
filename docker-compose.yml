@@ -1,6 +1,7 @@
 version: "3.9"
 
 services:
+
   web:
     build: .
     container_name: credit_app
@@ -11,6 +12,7 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     environment:
       DB_NAME: credit_db
       DB_USER: postgres
@@ -30,6 +32,22 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: credit_redis
+    ports:
+      - "6379:6379"
+
+  celery:
+    build: .
+    container_name: credit_celery
+    command: celery -A credit_system worker -l info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - db
 
 volumes:
   postgres_data:
